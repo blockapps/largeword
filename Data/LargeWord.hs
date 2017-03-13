@@ -24,16 +24,67 @@
 
 module Data.LargeWord
   ( LargeKey(..)
+  , Word24
+  , Word40
+  , Word48
+  , Word56
+  , Word72
+  , Word80
+  , Word88
   , Word96
+  , Word104
+  , Word112
+  , Word120
   , Word128
+  , Word136
+  , Word144
+  , Word152
   , Word160
+  , Word168
+  , Word176
+  , Word184
   , Word192
+  , Word200
+  , Word208
+  , Word216
   , Word224
+  , Word232
+  , Word240
+  , Word248
   , Word256
+  , Int24
+  , Int40
+  , Int48
+  , Int56
+  , Int72
+  , Int80
+  , Int88
+  , Int96
+  , Int104
+  , Int112
+  , Int120
+  , Int128
+  , Int136
+  , Int144
+  , Int152
+  , Int160
+  , Int168
+  , Int176
+  , Int184
+  , Int192
+  , Int200
+  , Int208
+  , Int216
+  , Int224
+  , Int232
+  , Int240
+  , Int248
+  , Int256
   , loHalf
   , hiHalf
   ) where
 
+import Data.Int
 import Data.Word
 import Data.Bits
 import Numeric
@@ -123,6 +174,58 @@ instance LargeWord Word64 where
   largeWordShift     = shift
   largeWordXor       = xor
   largeBitSize       = finiteBitSize
+
+-- Word8 is a key in the obvious way
+
+instance LargeWord Int8 where
+ largeWordToInteger = toInteger
+ integerToLargeWord = fromInteger
+ largeWordPlus      = (+)
+ largeWordMinus     = (-)
+ largeWordAnd       = (.&.)
+ largeWordOr        = (.|.)
+ largeWordShift     = shift
+ largeWordXor       = xor
+ largeBitSize       = finiteBitSize
+
+-- Word16 is a key in the obvious way
+
+instance LargeWord Int16 where
+ largeWordToInteger = toInteger
+ integerToLargeWord = fromInteger
+ largeWordPlus      = (+)
+ largeWordMinus     = (-)
+ largeWordAnd       = (.&.)
+ largeWordOr        = (.|.)
+ largeWordShift     = shift
+ largeWordXor       = xor
+ largeBitSize       = finiteBitSize
+
+-- Word32 is a key in the obvious way.
+
+instance LargeWord Int32 where
+ largeWordToInteger = toInteger
+ integerToLargeWord = fromInteger
+ largeWordPlus      = (+)
+ largeWordMinus     = (-)
+ largeWordAnd       = (.&.)
+ largeWordOr        = (.|.)
+ largeWordShift     = shift
+ largeWordXor       = xor
+ largeBitSize       = finiteBitSize
+
+-- Word64 is a key in the obvious way.
+
+instance LargeWord Int64 where
+ largeWordToInteger = toInteger
+ integerToLargeWord = fromInteger
+ largeWordPlus      = (+)
+ largeWordMinus     = (-)
+ largeWordAnd       = (.&.)
+ largeWordOr        = (.|.)
+ largeWordShift     = shift
+ largeWordXor       = xor
+ largeBitSize       = finiteBitSize
 
 -- Define larger keys from smaller ones.
 
@@ -279,11 +382,11 @@ instance (Ord a, Bits a, FiniteBits a, Num a, Bounded a, Bounded b, Enum a, Enum
 
 
 instance (Eq a, Bounded a, Num a, Enum b, Enum a, Bounded b, Num b) => Enum (LargeKey a b) where
-	toEnum i = LargeKey (toEnum i) 0
-	fromEnum (LargeKey l _) = fromEnum l
-	pred (LargeKey 0 h) = LargeKey maxBound (pred h)
-	pred (LargeKey l h) = LargeKey (pred l) h
-	succ (LargeKey l h) = if l == maxBound then LargeKey 0 (succ h)
+  toEnum i = LargeKey (toEnum i) 0
+  fromEnum (LargeKey l _) = fromEnum l
+  pred (LargeKey 0 h) = LargeKey maxBound (pred h)
+  pred (LargeKey l h) = LargeKey (pred l) h
+  succ (LargeKey l h) = if l == maxBound then LargeKey 0 (succ h)
                                                else LargeKey (succ l) h
 
 instance (Binary a, Binary b) => Binary (LargeKey a b) where
@@ -293,9 +396,60 @@ instance (Binary a, Binary b) => Binary (LargeKey a b) where
 instance (Ord a, Ord b) => Ord (LargeKey a b) where
     compare a b = compare (hiHalf a, loHalf a) (hiHalf b, loHalf b)
 
+type Word24 = LargeKey Word8 Word16
+type Word40 = LargeKey Word8 Word32
+type Word48 = LargeKey Word16 Word32
+type Word56 = LargeKey Word24 Word32
+type Word72 = LargeKey Word8 Word64
+type Word80 = LargeKey Word16 Word64
+type Word88 = LargeKey Word24 Word64
 type Word96  = LargeKey Word32 Word64
+type Word104 = LargeKey Word8 Word96
+type Word112 = LargeKey Word16 Word96
+type Word120 = LargeKey Word24 Word96
 type Word128 = LargeKey Word64 Word64
+type Word136 = LargeKey Word8 Word128
+type Word144 = LargeKey Word16 Word128
+type Word152 = LargeKey Word8 Word144
 type Word160 = LargeKey Word32 Word128
+type Word168 = LargeKey Word8 Word160
+type Word176 = LargeKey Word8 Word168
+type Word184 = LargeKey Word8 Word176
 type Word192 = LargeKey Word64 Word128
+type Word200 = LargeKey Word8 Word192
+type Word208 = LargeKey Word8 Word200
+type Word216 = LargeKey Word8 Word208
 type Word224 = LargeKey Word32 Word192
+type Word232 = LargeKey Word8 Word224
+type Word240 = LargeKey Word8 Word232
+type Word248 = LargeKey Word8 Word240
 type Word256 = LargeKey Word64 Word192
+
+type Int24 = LargeKey Int8 Word16
+type Int40 = LargeKey Int8 Word32
+type Int48 = LargeKey Int16 Word32
+type Int56 = LargeKey Int24 Word32
+type Int72 = LargeKey Int8 Word64
+type Int80 = LargeKey Int16 Word64
+type Int88 = LargeKey Int24 Word64
+type Int96 = LargeKey Int32 Word64
+type Int104 = LargeKey Int8 Word96
+type Int112 = LargeKey Int16 Word96
+type Int120 = LargeKey Int24 Word96
+type Int128 = LargeKey Int32 Word96
+type Int136 = LargeKey Int8 Word128
+type Int144 = LargeKey Int16 Word128
+type Int152 = LargeKey Int8 Word144
+type Int160 = LargeKey Int16 Word144
+type Int168 = LargeKey Int8 Word160
+type Int176 = LargeKey Int8 Word168
+type Int184 = LargeKey Int8 Word176
+type Int192 = LargeKey Int16 Word176
+type Int200 = LargeKey Int8 Word192
+type Int208 = LargeKey Int8 Word200
+type Int216 = LargeKey Int8 Word208
+type Int224 = LargeKey Int16 Word208
+type Int232 = LargeKey Int8 Word224
+type Int240 = LargeKey Int8 Word232
+type Int248 = LargeKey Int8 Word240
+type Int256 = LargeKey Int16 Word240
